@@ -82,6 +82,7 @@ public class MyBatisGeneratorTest {
             myBatisGenerator.generate(null, null, null, false);
         } catch (InvalidConfigurationException e) {
             assertEquals(3, e.getErrors().size());
+            e.printStackTrace();
             throw e;
         }
     }

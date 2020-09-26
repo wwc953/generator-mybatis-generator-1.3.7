@@ -61,6 +61,7 @@ public class XmlCodeGenerationTest {
             builder.setErrorHandler(new TestErrorHandler());
             builder.parse(is);
         } catch (Exception e) {
+            e.printStackTrace();
             fail("Generated XML File " + generatedXmlFile.getFileName() + " will not parse");
         }
     }
@@ -69,7 +70,7 @@ public class XmlCodeGenerationTest {
     public static List<GeneratedXmlFile> generateXmlFiles() throws Exception {
         List<GeneratedXmlFile> generatedFiles = new ArrayList<GeneratedXmlFile>();
         generatedFiles.addAll(generateXmlFilesMybatis());
-        generatedFiles.addAll(generateXmlFilesIbatis());
+//        generatedFiles.addAll(generateXmlFilesIbatis());
         return generatedFiles;
     }
 
@@ -78,20 +79,21 @@ public class XmlCodeGenerationTest {
         return generateXmlFiles("/scripts/generatorConfig.xml");
     }
 
-    private static List<GeneratedXmlFile> generateXmlFilesIbatis() throws Exception {
-        JavaCodeGenerationTest.createDatabase();
-        return generateXmlFiles("/scripts/ibatorConfig.xml");
-    }
+//    private static List<GeneratedXmlFile> generateXmlFilesIbatis() throws Exception {
+//        JavaCodeGenerationTest.createDatabase();
+//        return generateXmlFiles("/scripts/ibatorConfig.xml");
+//    }
 
     private static List<GeneratedXmlFile> generateXmlFiles(String configFile) throws Exception {
         List<String> warnings = new ArrayList<String>();
         ConfigurationParser cp = new ConfigurationParser(warnings);
-        Configuration config = cp.parseConfiguration(JavaCodeGenerationTest.class.getResourceAsStream(configFile));
+        Configuration config = cp.parseConfiguration(
+                JavaCodeGenerationTest.class.getResourceAsStream(configFile));
 
         DefaultShellCallback shellCallback = new DefaultShellCallback(true);
 
         MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, shellCallback, warnings);
-        myBatisGenerator.generate(null, null, null, false);
+        myBatisGenerator.generate(null, null, null, true);
         return myBatisGenerator.getGeneratedXmlFiles();
     }
 
