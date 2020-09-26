@@ -1,6 +1,7 @@
 drop table AppleTable if exists;
 create table AppleTable
 (
+    My_aaa decimal(10),
     My_Id         int not null,
     My_Name       varchar(20),
     My_Date       date,

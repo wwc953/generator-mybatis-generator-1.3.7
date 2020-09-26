@@ -448,6 +448,7 @@ public class Context extends PropertyHolder {
             DatabaseIntrospector databaseIntrospector = new DatabaseIntrospector(
                     this, connection.getMetaData(), javaTypeResolver, warnings);
 
+            //tableConfigurations --> table标签
             for (TableConfiguration tc : tableConfigurations) {
                 String tableName = composeFullyQualifiedTableName(tc.getCatalog(), tc
                                 .getSchema(), tc.getTableName(), '.');

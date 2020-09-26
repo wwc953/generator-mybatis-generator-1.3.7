@@ -185,6 +185,7 @@ public class DatabaseIntrospector {
         }
 
         removeIgnoredColumns(tc, columns);
+        //javaType 属性设置
         calculateExtraColumnInformation(tc, columns);
         applyColumnOverrides(tc, columns);
         calculateIdentityColumns(tc, columns);
