@@ -253,6 +253,9 @@ public class MyBatisGenerator {
         }
         callback.introspectionStarted(totalSteps);
 
+        //TODO 解析
+        //TODO xml所有<context>下配置的表
+        //TODO 每个<context>对应一个Context对象
         for (Context context : contextsToRun) {
             context.introspectTables(callback, warnings,
                     fullyQualifiedTableNames);
