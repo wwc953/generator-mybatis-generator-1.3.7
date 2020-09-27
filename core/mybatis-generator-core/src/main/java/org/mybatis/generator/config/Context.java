@@ -515,8 +515,12 @@ public class Context extends PropertyHolder {
                 callback.checkCancel();
 
                 introspectedTable.initialize();
+                //TODO 根据<context targetRuntime="xxx">创建相应的JavaGenerators或XMLGenerators
                 introspectedTable.calculateGenerators(warnings, callback);
-                //TODO 调用子类IntrospectedTableMyBatis3Impl
+
+                //TODO 调用子类IntrospectedTableMyBatis3SimpleImpl或IntrospectedTableMyBatis3Impl
+                //TODO <context id="xxx" targetRuntime="MyBatis3Simple"> 或 <context id="xxx" targetRuntime="MyBatis3">
+                //TODO ObjectFactory.createIntrospectedTableForValidation(Context context)
                 generatedJavaFiles.addAll(introspectedTable.getGeneratedJavaFiles());
                 generatedXmlFiles.addAll(introspectedTable.getGeneratedXmlFiles());
 

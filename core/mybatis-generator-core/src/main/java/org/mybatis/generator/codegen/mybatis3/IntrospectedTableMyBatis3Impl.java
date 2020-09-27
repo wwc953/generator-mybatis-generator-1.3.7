@@ -168,13 +168,14 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
         abstractGenerator.setWarnings(warnings);
     }
 
-    //TODO Mybatis3 xxx.java
+    //TODO Mybatis3Simple xxx.java
     @Override
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<GeneratedJavaFile>();
 
-        //<javaModelGenerator> 实体类
-        //SimpleModelGenerator
+        //TODO <javaModelGenerator> 实体类
+        //TODO MyBatis3Simple --> SimpleModelGenerator
+        //TODO IntrospectedTableMyBatis3SimpleImpl.calculateJavaModelGenerators
         for (AbstractJavaGenerator javaGenerator : javaModelGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator
                     .getCompilationUnits();
@@ -188,8 +189,8 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             }
         }
 
-        //<javaClientGenerator> xxxDao.java
-        //SimpleJavaClientGenerator
+        //TODO <javaClientGenerator> xxxDao.java
+        //TODO SimpleJavaClientGenerator
         for (AbstractJavaGenerator javaGenerator : clientGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator
                     .getCompilationUnits();

@@ -21,6 +21,7 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hsqldb.lib.StringUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -42,7 +43,7 @@ public class JavaCodeGenerationTest {
     public JavaCodeGenerationTest(GeneratedJavaFile generatedJavaFile) {
         this.generatedJavaFile = generatedJavaFile;
     }
-
+//StringUtil.capitalizeWithJavaBeanConvention();
     @Test
     public void testJavaParse() {
         ByteArrayInputStream is = new ByteArrayInputStream(

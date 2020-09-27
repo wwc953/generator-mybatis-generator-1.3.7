@@ -1,17 +1,17 @@
 /**
- *    Copyright 2006-2017 the original author or authors.
- *
- *    Licensed under the Apache License, Version 2.0 (the "License");
- *    you may not use this file except in compliance with the License.
- *    You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- *    Unless required by applicable law or agreed to in writing, software
- *    distributed under the License is distributed on an "AS IS" BASIS,
- *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *    See the License for the specific language governing permissions and
- *    limitations under the License.
+ * Copyright 2006-2017 the original author or authors.
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.mybatis.generator.codegen.mybatis3.model;
 
@@ -38,9 +38,9 @@ import org.mybatis.generator.codegen.AbstractJavaGenerator;
 import org.mybatis.generator.codegen.RootClassInfo;
 
 /**
- * 
+ *
  * @author Jeff Butler
- * 
+ *
  */
 public class SimpleModelGenerator extends AbstractJavaGenerator {
 
@@ -52,9 +52,14 @@ public class SimpleModelGenerator extends AbstractJavaGenerator {
     public List<CompilationUnit> getCompilationUnits() {
         FullyQualifiedTable table = introspectedTable.getFullyQualifiedTable();
         progressCallback.startTask(getString("Progress.8", table.toString())); //$NON-NLS-1$
+        //plugin
         Plugin plugins = context.getPlugins();
+
+        //TODO 注释
+        //TODO <commentGenerator type="org.mybatis.generator.plugins.MyComGGGG">
         CommentGenerator commentGenerator = context.getCommentGenerator();
 
+        //TODO introspectedTable.getBaseRecordType() --> mbg.test.mb3.generated.simple.model.ApplePO
         FullyQualifiedJavaType type = new FullyQualifiedJavaType(
                 introspectedTable.getBaseRecordType());
         TopLevelClass topLevelClass = new TopLevelClass(type);
@@ -86,6 +91,7 @@ public class SimpleModelGenerator extends AbstractJavaGenerator {
                 continue;
             }
 
+            //TODO 表字段 --> 属性
             Field field = getJavaBeansField(introspectedColumn, context, introspectedTable);
             if (plugins.modelFieldGenerated(field, topLevelClass,
                     introspectedColumn, introspectedTable,
@@ -94,6 +100,7 @@ public class SimpleModelGenerator extends AbstractJavaGenerator {
                 topLevelClass.addImportedType(field.getType());
             }
 
+            //TODO 表字段 --> get方法
             Method method = getJavaBeansGetter(introspectedColumn, context, introspectedTable);
             if (plugins.modelGetterMethodGenerated(method, topLevelClass,
                     introspectedColumn, introspectedTable,
@@ -102,6 +109,7 @@ public class SimpleModelGenerator extends AbstractJavaGenerator {
             }
 
             if (!introspectedTable.isImmutable()) {
+                //TODO 表字段 --> set方法
                 method = getJavaBeansSetter(introspectedColumn, context, introspectedTable);
                 if (plugins.modelSetterMethodGenerated(method, topLevelClass,
                         introspectedColumn, introspectedTable,

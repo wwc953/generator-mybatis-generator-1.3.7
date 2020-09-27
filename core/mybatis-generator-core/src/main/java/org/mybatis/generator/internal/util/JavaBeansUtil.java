@@ -56,6 +56,8 @@ public class JavaBeansUtil {
 
         sb.append(property);
         if (Character.isLowerCase(sb.charAt(0))) {
+            //TODO 属性一个字符 或 第二个字符是小写
+            //TODO 才将属性的第一个字符转大写
             if (sb.length() == 1 || !Character.isUpperCase(sb.charAt(1))) {
                 sb.setCharAt(0, Character.toUpperCase(sb.charAt(0)));
             }
