@@ -43,14 +43,14 @@
             <property name="trimStrings" value="true"/>
         </javaModelGenerator>
 
-        <sqlMapGenerator targetPackage="mbg.test.mb3.generated.simple.xml" targetProject="MAVEN">
-            <property name="enableSubPackages" value="true"/>
-        </sqlMapGenerator>
-
         <javaClientGenerator type="XMLMAPPER" targetPackage="mbg.test.mb3.generated.simple.mapper"
                              targetProject="MAVEN">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
+
+        <sqlMapGenerator targetPackage="mbg.test.mb3.generated.simple.xml" targetProject="MAVEN">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
 
         <table tableName="AppleTable" domainObjectName="ApplePO"/>
     </context>

@@ -281,11 +281,13 @@ public class MyBatisGenerator {
             callback.saveStarted(generatedXmlFiles.size()
                     + generatedJavaFiles.size());
 
+            //TODO 写XML
             for (GeneratedXmlFile gxf : generatedXmlFiles) {
                 projects.add(gxf.getTargetProject());
                 writeGeneratedXmlFile(gxf, callback);
             }
 
+            //TODO 写JAVA --> xxxMapper.java 和 xxx.java
             for (GeneratedJavaFile gjf : generatedJavaFiles) {
                 projects.add(gjf.getTargetProject());
                 writeGeneratedJavaFile(gjf, callback);

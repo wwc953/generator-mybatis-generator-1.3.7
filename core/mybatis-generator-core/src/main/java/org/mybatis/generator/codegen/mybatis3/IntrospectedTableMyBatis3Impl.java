@@ -173,7 +173,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
     public List<GeneratedJavaFile> getGeneratedJavaFiles() {
         List<GeneratedJavaFile> answer = new ArrayList<GeneratedJavaFile>();
 
-        //javaModel生产者
+        //<javaModelGenerator> 实体类
         //SimpleModelGenerator
         for (AbstractJavaGenerator javaGenerator : javaModelGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator
@@ -188,6 +188,7 @@ public class IntrospectedTableMyBatis3Impl extends IntrospectedTable {
             }
         }
 
+        //<javaClientGenerator> xxxDao.java
         //SimpleJavaClientGenerator
         for (AbstractJavaGenerator javaGenerator : clientGenerators) {
             List<CompilationUnit> compilationUnits = javaGenerator
