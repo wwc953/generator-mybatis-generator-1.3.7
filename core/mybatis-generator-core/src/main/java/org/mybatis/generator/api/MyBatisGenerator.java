@@ -268,6 +268,9 @@ public class MyBatisGenerator {
         }
         callback.generationStarted(totalSteps);
 
+        //TODO 文件生成器
+        //TODO generatedJavaFiles xxx.java --> SimpleModelGenerator.java
+        //TODO generatedXmlFiles xxx.xml --> SimpleJavaClientGenerator.java
         for (Context context : contextsToRun) {
             context.generateFiles(callback, generatedJavaFiles,
                     generatedXmlFiles, warnings);
