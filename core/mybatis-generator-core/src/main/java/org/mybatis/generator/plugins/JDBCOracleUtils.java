@@ -157,6 +157,29 @@ public class JDBCOracleUtils {
         return sb.toString();
     }
 
+    public static String updateSQL(String tableName) {
+        if (columnInfos == null || columnInfos.isEmpty()) {
+            columnInfos = getColumns(tableName);
+        }
+        ColumnInfo pkInfo = null;
+        int size = columnInfos.size();
+        StringBuilder sb = new StringBuilder("update  " + tableName + " set ");
+        for (int i = 0; i < size; i++) {
+            ColumnInfo info = columnInfos.get(i);
+            if (!"1".equals(info.getPk())) {
+                sb.append(info.getColName() + " = ?");
+                if (i != size - 1) {
+                    sb.append(", ");
+                }
+            } else {
+                pkInfo = info;
+            }
+        }
+
+        sb.append(" where " + pkInfo.getColName() + " = ?");
+        return sb.toString();
+    }
+
     public static Connection getConnection() {
         Connection conn = null;
         try {
@@ -172,7 +195,7 @@ public class JDBCOracleUtils {
 
     public static void main(String[] args) throws SQLException {
 //        List<ColumnInfo> my_test = getColumns("my_test");
-        System.out.println(insertSQL("my_test"));
+        System.out.println(updateSQL("my_test"));
     }
 
     private static class ColumnInfo implements Serializable {
