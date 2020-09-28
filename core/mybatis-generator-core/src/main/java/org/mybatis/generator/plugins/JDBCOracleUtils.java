@@ -46,8 +46,7 @@ public class JDBCOracleUtils {
         ResultSet rs = null;
         try {
             conn = getConnection();
-            String sql = getColumnsInfoSQL();
-            ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(getColumnsInfoSQL());
             ps.setString(1, tableName);
             ps.setString(2, tableName);
             ps.setString(3, tableName);
@@ -200,6 +199,7 @@ public class JDBCOracleUtils {
     public static Connection getConnection() {
         Connection conn = null;
         try {
+            //初始化驱动类oracle.jdbc.OracleDriver, 加载到JVM
             Class.forName("oracle.jdbc.OracleDriver");
             conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.43.66:1521:orcl",
                     "test", "test");
