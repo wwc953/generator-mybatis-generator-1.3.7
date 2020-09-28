@@ -1,44 +1,54 @@
-package org.mybatis.generator.plugins;
+package org.mybatis.generator.jdbc;
 
-import java.io.Serializable;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: 自动生成JDBC代码(Oracle)
+ * @Description: 自动生成JDBC代码
  * @author: wangwc
  * @date: 2020/9/27 17:27
  */
-public class JDBCOracleUtils {
+public abstract class AbstractJdbcUtils {
 
-    private static List<ColumnInfo> columnInfos;
-
-    public static final String GET_METHOD = "get";
-    public static final String SET_METHOD = "set";
-    public static final String INSERT = "insert";
-    public static final String UPDATE = "update";
+    private List<ColumnInfo> columnInfos;
 
     /**
-     * Oracle表信息SQL
-     *
+     * get方法
+     */
+    public static final String GET_METHOD = "get";
+    /**
+     * set方法
+     */
+    public static final String SET_METHOD = "set";
+
+    public static final String INSERT = "insert";
+    public static final String UPDATE = "update";
+    public static final String DELETE = "delete";
+    public static final String SELECT = "select";
+
+    /**
+     * 表信息SQL
      * @return
      */
-    private static String getColumnsInfoSQL() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("SELECT a.column_id, a.column_name, a.data_type, a.data_precision, a.data_scale, b.comments, ");
-        sb.append(" CASE WHEN a.column_name = ( SELECT col.column_name FROM user_constraints con JOIN user_cons_columns col ON con.constraint_name = col.constraint_name WHERE con.table_name = ? AND con.constraint_type = 'P' ) THEN 1 ELSE 0 END AS PK,");
-        sb.append(" (SELECT nvl (t.comments, ' ') FROM user_tab_comments t WHERE t.table_name = ? ) AS table_comments");
-        sb.append(" from user_tab_cols a JOIN user_col_comments b ON a.column_name = b.column_name AND a.table_name = b.table_name WHERE a.table_name = ? ORDER BY a.column_id");
-        return sb.toString();
-    }
+    public abstract String getColumnsInfoSQL();
+
+    /**
+     * 获取连接
+     * @return
+     */
+    public abstract Connection getConnection();
 
     /**
      * 获取表字段信息
+     *
      * @param tableName
      * @return
      */
-    public static List<ColumnInfo> getColumns(String tableName) {
+    public List<ColumnInfo> getColumns(String tableName) {
         List<ColumnInfo> columnInfos = new ArrayList<ColumnInfo>();
 
         Connection conn = null;
@@ -54,14 +64,14 @@ public class JDBCOracleUtils {
             rs = ps.executeQuery();
             while (rs.next()) {
                 ColumnInfo info = new ColumnInfo();
-                info.setColId(rs.getInt("COLUMN_ID"));
+                info.setColId(rs.getInt("ORDINAL_POSITION"));
                 info.setColName(rs.getString("COLUMN_NAME"));
                 info.setColType(rs.getString("DATA_TYPE"));
-                info.setNumBefor(rs.getInt("DATA_PRECISION"));
-                info.setNumAfter(rs.getInt("DATA_SCALE"));
-                info.setComments(rs.getString("COMMENTS"));
+                info.setNumBefor(rs.getInt("NUMERIC_PRECISION"));
+                info.setNumAfter(rs.getInt("NUMERIC_SCALE"));
+                info.setComments(rs.getString("COLUMN_COMMENT"));
                 info.setPk(rs.getString("PK"));
-                info.setTableComments(rs.getString("TABLE_COMMENTS"));
+                info.setTableComments(rs.getString("TABLE_COMMENT"));
                 columnInfos.add(info);
             }
 //            columnInfos.forEach(v -> v.setJavaProperty(camelCaseString(v.getColName())));
@@ -76,7 +86,7 @@ public class JDBCOracleUtils {
         return columnInfos;
     }
 
-    public static void colse(ResultSet rs, PreparedStatement ps, Connection conn) {
+    public void colse(ResultSet rs, PreparedStatement ps, Connection conn) {
         if (rs != null) {
             try {
                 rs.close();
@@ -107,7 +117,7 @@ public class JDBCOracleUtils {
      * @param columnName
      * @return
      */
-    public static String camelCaseString(String columnName) {
+    public String camelCaseString(String columnName) {
         if (isEmpty(columnName)) return null;
         char[] charArray = columnName.toLowerCase().toCharArray();
         for (int i = 0; i < charArray.length; i++) {
@@ -117,7 +127,7 @@ public class JDBCOracleUtils {
         return new String(charArray).replace("_", "");
     }
 
-    public static boolean isEmpty(String inputString) {
+    public boolean isEmpty(String inputString) {
         if (inputString == null || inputString.trim().length() == 0) {
             return true;
         }
@@ -131,7 +141,7 @@ public class JDBCOracleUtils {
      * @param methodType
      * @return
      */
-    public static String getGetOrSetJavaMethodName(String property, String methodType) {
+    public String getGetOrSetJavaMethodName(String property, String methodType) {
         char[] charArray = property.toCharArray();
         char c = charArray[1];
         if (!(c >= 'A' && c <= 'Z')) {
@@ -142,7 +152,7 @@ public class JDBCOracleUtils {
         return sb.toString();
     }
 
-    public static String insertSQL(String tableName) {
+    public String insertSQL(String tableName) {
         if (columnInfos == null || columnInfos.isEmpty()) {
             columnInfos = getColumns(tableName);
         }
@@ -173,7 +183,7 @@ public class JDBCOracleUtils {
         return sb.toString();
     }
 
-    public static String updateSQL(String tableName) {
+    protected String updateSQL(String tableName) {
         if (columnInfos == null || columnInfos.isEmpty()) {
             columnInfos = getColumns(tableName);
         }
@@ -196,107 +206,6 @@ public class JDBCOracleUtils {
         return sb.toString();
     }
 
-    public static Connection getConnection() {
-        Connection conn = null;
-        try {
-            //初始化驱动类oracle.jdbc.OracleDriver, 加载到JVM
-            Class.forName("oracle.jdbc.OracleDriver");
-            conn = DriverManager.getConnection("jdbc:oracle:thin:@192.168.43.66:1521:orcl",
-                    "test", "test");
-            conn.setAutoCommit(false);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return conn;
-    }
 
-    public static void main(String[] args) throws SQLException {
-//        List<ColumnInfo> my_test = getColumns("my_test");
-        System.out.println(updateSQL("my_test"));
-    }
-
-    private static class ColumnInfo implements Serializable {
-        private Integer colId;//字段设计顺序
-        private String colName;//字段名
-        private String colType;//字段类型
-        private Integer numBefor;//NUMBER(a,b) ==> a
-        private Integer numAfter;//NUMBER(a,b) ==> b
-        private String comments;//字段注释
-        private String pk;//主键 1是 0否
-        private String tableComments;//表注释
-        private String javaProperty;//java属性
-
-        public String getJavaProperty() {
-            return javaProperty;
-        }
-
-        public void setJavaProperty(String javaProperty) {
-            this.javaProperty = javaProperty;
-        }
-
-        public Integer getColId() {
-            return colId;
-        }
-
-        public void setColId(Integer colId) {
-            this.colId = colId;
-        }
-
-        public String getColName() {
-            return colName;
-        }
-
-        public void setColName(String colName) {
-            this.colName = colName;
-        }
-
-        public String getColType() {
-            return colType;
-        }
-
-        public void setColType(String colType) {
-            this.colType = colType;
-        }
-
-        public Integer getNumBefor() {
-            return numBefor;
-        }
-
-        public void setNumBefor(Integer numBefor) {
-            this.numBefor = numBefor;
-        }
-
-        public Integer getNumAfter() {
-            return numAfter;
-        }
-
-        public void setNumAfter(Integer numAfter) {
-            this.numAfter = numAfter;
-        }
-
-        public String getComments() {
-            return comments;
-        }
-
-        public void setComments(String comments) {
-            this.comments = comments;
-        }
-
-        public String getPk() {
-            return pk;
-        }
-
-        public void setPk(String pk) {
-            this.pk = pk;
-        }
-
-        public String getTableComments() {
-            return tableComments;
-        }
-
-        public void setTableComments(String tableComments) {
-            this.tableComments = tableComments;
-        }
-    }
 
 }
