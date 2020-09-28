@@ -31,6 +31,7 @@ public class OutputUtilities {
     private static final String lineSeparator;
 
     static {
+        // TODO 系统参数
         String ls = System.getProperty("line.separator"); //$NON-NLS-1$
         if (ls == null) {
             ls = "\n"; //$NON-NLS-1$
