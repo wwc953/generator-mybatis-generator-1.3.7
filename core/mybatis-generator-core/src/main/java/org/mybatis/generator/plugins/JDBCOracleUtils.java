@@ -6,13 +6,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @Description: TODO 自动生成JDBC代码
+ * @Description: 自动生成JDBC代码(Oracle)
  * @author: wangwc
  * @date: 2020/9/27 17:27
  */
 public class JDBCOracleUtils {
 
     private static List<ColumnInfo> columnInfos;
+
+    public static final String GET_METHOD = "get";
+    public static final String SET_METHOD = "set";
+    public static final String INSERT = "insert";
+    public static final String UPDATE = "update";
 
     /**
      * Oracle表信息SQL
@@ -28,7 +33,11 @@ public class JDBCOracleUtils {
         return sb.toString();
     }
 
-
+    /**
+     * 获取表字段信息
+     * @param tableName
+     * @return
+     */
     public static List<ColumnInfo> getColumns(String tableName) {
         List<ColumnInfo> columnInfos = new ArrayList<ColumnInfo>();
 
@@ -45,16 +54,16 @@ public class JDBCOracleUtils {
 
             rs = ps.executeQuery();
             while (rs.next()) {
-                ColumnInfo c = new ColumnInfo();
-                c.setColId(rs.getInt("COLUMN_ID"));
-                c.setColName(rs.getString("COLUMN_NAME"));
-                c.setColType(rs.getString("DATA_TYPE"));
-                c.setNumBefor(rs.getInt("DATA_PRECISION"));
-                c.setNumAfter(rs.getInt("DATA_SCALE"));
-                c.setComments(rs.getString("COMMENTS"));
-                c.setPk(rs.getString("PK"));
-                c.setTableComments(rs.getString("TABLE_COMMENTS"));
-                columnInfos.add(c);
+                ColumnInfo info = new ColumnInfo();
+                info.setColId(rs.getInt("COLUMN_ID"));
+                info.setColName(rs.getString("COLUMN_NAME"));
+                info.setColType(rs.getString("DATA_TYPE"));
+                info.setNumBefor(rs.getInt("DATA_PRECISION"));
+                info.setNumAfter(rs.getInt("DATA_SCALE"));
+                info.setComments(rs.getString("COMMENTS"));
+                info.setPk(rs.getString("PK"));
+                info.setTableComments(rs.getString("TABLE_COMMENTS"));
+                columnInfos.add(info);
             }
 //            columnInfos.forEach(v -> v.setJavaProperty(camelCaseString(v.getColName())));
             for (ColumnInfo cinfo : columnInfos) {
@@ -100,12 +109,20 @@ public class JDBCOracleUtils {
      * @return
      */
     public static String camelCaseString(String columnName) {
+        if (isEmpty(columnName)) return null;
         char[] charArray = columnName.toLowerCase().toCharArray();
         for (int i = 0; i < charArray.length; i++) {
             if (charArray[i] == '_')
                 charArray[i + 1] -= 32;
         }
         return new String(charArray).replace("_", "");
+    }
+
+    public static boolean isEmpty(String inputString) {
+        if (inputString == null || inputString.trim().length() == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
