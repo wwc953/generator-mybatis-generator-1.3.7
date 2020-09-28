@@ -16,7 +16,7 @@ import java.util.List;
  */
 public abstract class AbstractJdbcUtils {
 
-    private List<ColumnInfo> columnInfos;
+    protected List<ColumnInfo> columnInfos;
 
     /**
      * get方法
@@ -154,38 +154,9 @@ public abstract class AbstractJdbcUtils {
         return sb.toString();
     }
 
-    public String insertSQL(String tableName) {
-        if (columnInfos == null || columnInfos.isEmpty()) {
-            columnInfos = getColumns(tableName);
-        }
-        int size = columnInfos.size();
-        StringBuilder sb = new StringBuilder("insert into ");
-        tableName = tableName.toUpperCase();
-        sb.append(tableName + "(");
-        for (int i = 0; i < size; i++) {
-            ColumnInfo info = columnInfos.get(i);
-            sb.append(info.getColName());
-            if (i != size - 1) {
-                sb.append(", ");
-            }
-        }
-        sb.append(" ) values (");
-        for (int i = 0; i < size; i++) {
-            ColumnInfo info = columnInfos.get(i);
-            if ("1".equals(info.getPk())) {
-                sb.append(tableName + "_seq.nextval");
-            } else {
-                sb.append(" ?");
-            }
-            if (i != size - 1) {
-                sb.append(", ");
-            }
-        }
-        sb.append(" )");
-        return sb.toString();
-    }
+    public abstract String insertSQL(String tableName);
 
-    protected String updateSQL(String tableName) {
+    public String updateSQL(String tableName) {
         if (columnInfos == null || columnInfos.isEmpty()) {
             columnInfos = getColumns(tableName);
         }
@@ -208,6 +179,11 @@ public abstract class AbstractJdbcUtils {
         return sb.toString();
     }
 
+    protected void initColumnsInfoList(String tableName){
+        if (columnInfos == null || columnInfos.isEmpty()) {
+            columnInfos = getColumns(tableName);
+        }
+    }
 
 
 }

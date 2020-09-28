@@ -1,5 +1,7 @@
 package org.mybatis.generator.jdbc;
 
+import org.mybatis.generator.jdbc.vo.ColumnInfo;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 
@@ -33,5 +35,36 @@ public class OracleUtils extends AbstractJdbcUtils {
             e.printStackTrace();
         }
         return conn;
+    }
+
+    @Override
+    public String insertSQL(String tableName) {
+        super.initColumnsInfoList(tableName);
+
+        int size = columnInfos.size();
+        StringBuilder sb = new StringBuilder("insert into ");
+        tableName = tableName.toUpperCase();
+        sb.append(tableName + "(");
+        for (int i = 0; i < size; i++) {
+            ColumnInfo info = columnInfos.get(i);
+            sb.append(info.getColName());
+            if (i != size - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append(" ) values (");
+        for (int i = 0; i < size; i++) {
+            ColumnInfo info = columnInfos.get(i);
+            if ("1".equals(info.getPk())) {
+                sb.append(tableName + "_seq.nextval");
+            } else {
+                sb.append(" ?");
+            }
+            if (i != size - 1) {
+                sb.append(", ");
+            }
+        }
+        sb.append(" )");
+        return sb.toString();
     }
 }
