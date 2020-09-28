@@ -1,5 +1,7 @@
 package org.mybatis.generator.jdbc;
 
+import org.mybatis.generator.jdbc.vo.ColumnInfo;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

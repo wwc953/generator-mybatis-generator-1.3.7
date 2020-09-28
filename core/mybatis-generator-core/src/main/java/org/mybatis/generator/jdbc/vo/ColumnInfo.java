@@ -1,9 +1,9 @@
-package org.mybatis.generator.jdbc;
+package org.mybatis.generator.jdbc.vo;
 
 import java.io.Serializable;
 
 /**
- * @Description: TODO
+ * @Description: 字段信息实体
  * @author: wangwc
  * @date: 2020/9/28 11:11
  */
