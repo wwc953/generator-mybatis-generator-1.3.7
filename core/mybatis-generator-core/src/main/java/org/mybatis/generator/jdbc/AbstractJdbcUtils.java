@@ -34,12 +34,14 @@ public abstract class AbstractJdbcUtils {
 
     /**
      * 表信息SQL
+     *
      * @return
      */
     public abstract String getColumnsInfoSQL();
 
     /**
      * 获取连接
+     *
      * @return
      */
     public abstract Connection getConnection();
@@ -157,12 +159,10 @@ public abstract class AbstractJdbcUtils {
     public abstract String insertSQL(String tableName);
 
     public String updateSQL(String tableName) {
-        if (columnInfos == null || columnInfos.isEmpty()) {
-            columnInfos = getColumns(tableName);
-        }
+        this.initColumnsInfoList(tableName);
         ColumnInfo pkInfo = null;
         int size = columnInfos.size();
-        StringBuilder sb = new StringBuilder("update  " + tableName + " set ");
+        StringBuilder sb = new StringBuilder(" update " + tableName + " set ");
         for (int i = 0; i < size; i++) {
             ColumnInfo info = columnInfos.get(i);
             if (!"1".equals(info.getPk())) {
@@ -179,7 +179,7 @@ public abstract class AbstractJdbcUtils {
         return sb.toString();
     }
 
-    protected void initColumnsInfoList(String tableName){
+    protected void initColumnsInfoList(String tableName) {
         if (columnInfos == null || columnInfos.isEmpty()) {
             columnInfos = getColumns(tableName);
         }

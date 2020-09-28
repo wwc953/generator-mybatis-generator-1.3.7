@@ -7,7 +7,8 @@ package org.mybatis.generator.jdbc;
  */
 public class Test {
     public static void main(String[] args) {
-        MySqlUtils sqlUtils = new MySqlUtils();
-        System.out.println(sqlUtils.insertSQL("my_test"));
+        AbstractJdbcUtils utils = new MySqlUtils();
+//        AbstractJdbcUtils utils = new OracleUtils();
+        System.out.println(utils.updateSQL("my_test"));
     }
 }

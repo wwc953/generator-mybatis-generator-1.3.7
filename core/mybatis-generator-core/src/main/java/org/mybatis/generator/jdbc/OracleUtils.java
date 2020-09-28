@@ -40,31 +40,27 @@ public class OracleUtils extends AbstractJdbcUtils {
     @Override
     public String insertSQL(String tableName) {
         super.initColumnsInfoList(tableName);
-
-        int size = columnInfos.size();
         StringBuilder sb = new StringBuilder("insert into ");
+        StringBuilder valBuf = new StringBuilder();
+
         tableName = tableName.toUpperCase();
         sb.append(tableName + "(");
-        for (int i = 0; i < size; i++) {
+        for (int i = 0; i < columnInfos.size(); i++) {
             ColumnInfo info = columnInfos.get(i);
             sb.append(info.getColName());
-            if (i != size - 1) {
-                sb.append(", ");
-            }
-        }
-        sb.append(" ) values (");
-        for (int i = 0; i < size; i++) {
-            ColumnInfo info = columnInfos.get(i);
             if ("1".equals(info.getPk())) {
-                sb.append(tableName + "_seq.nextval");
+                valBuf.append(tableName);
+                valBuf.append("_seq.nextval");
             } else {
-                sb.append(" ?");
+                valBuf.append(" ?");
             }
-            if (i != size - 1) {
+            if (i != columnInfos.size() - 1) {
                 sb.append(", ");
+                valBuf.append(", ");
             }
         }
-        sb.append(" )");
+        sb.append(") values (").append(valBuf).append(")");
         return sb.toString();
     }
+
 }
