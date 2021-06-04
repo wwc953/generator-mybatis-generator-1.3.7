@@ -101,6 +101,7 @@ public class MyBatisGeneratorConfigurationParser {
             } else if ("classPathEntry".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseClassPathEntry(configuration, childNode);
             } else if ("context".equals(childNode.getNodeName())) { //$NON-NLS-1$
+                // TODO 解析 <context></context>
                 parseContext(configuration, childNode);
             }
         }
@@ -184,6 +185,7 @@ public class MyBatisGeneratorConfigurationParser {
                 continue;
             }
 
+            // TODO 解析各种 标签 存放至 Context 实例中
             if ("property".equals(childNode.getNodeName())) { //$NON-NLS-1$
                 parseProperty(context, childNode);
             } else if ("plugin".equals(childNode.getNodeName())) { //$NON-NLS-1$

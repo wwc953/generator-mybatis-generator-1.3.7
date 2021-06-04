@@ -162,6 +162,7 @@ public class ConfigurationParser {
             } else if (rootNode.getNodeType() == Node.ELEMENT_NODE
                     && docType.getPublicId().equals(
                             XmlConstants.MYBATIS_GENERATOR_CONFIG_PUBLIC_ID)) {
+                //TODO 解析MyBatis的XML配置文件
                 config = parseMyBatisGeneratorConfiguration(rootNode);
             } else {
                 throw new XMLParserException(getString("RuntimeError.5")); //$NON-NLS-1$
