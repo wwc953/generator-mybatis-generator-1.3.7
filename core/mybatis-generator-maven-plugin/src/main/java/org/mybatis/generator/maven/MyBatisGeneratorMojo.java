@@ -71,6 +71,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
     /**
      * Location of the configuration file.
      */
+    // TODO maven 读取 generatorConfig配置文件的位置
     @Parameter(property = "mybatis.generator.configurationFile",
             defaultValue = "${project.basedir}/src/main/resources/generatorConfig.xml", required = true)
     private File configurationFile;
@@ -219,6 +220,7 @@ public class MyBatisGeneratorMojo extends AbstractMojo {
         try {
             ConfigurationParser cp = new ConfigurationParser(
                     project.getProperties(), warnings);
+            // TODO 读取generatorConfig配置文件
             Configuration config = cp.parseConfiguration(configurationFile);
 
             ShellCallback callback = new MavenShellCallback(this, overwrite);
